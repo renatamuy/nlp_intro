@@ -440,7 +440,7 @@ Rohan Alexander
 <li>Each with one part conceptual and one part coding.</li>
 <li>10 min break between each.</li>
 </ul></li>
-<li>Code and slides are available: LINK</li>
+<li>Code and slides are available: <a href="https://github.com/RohanAlexander/nlp_intro" class="uri">https://github.com/RohanAlexander/nlp_intro</a></li>
 </ul>
 <aside class="notes">
 
@@ -562,12 +562,19 @@ Rohan Alexander
 <section id="why-quantitative-approaches" class="slide level2">
 <h2>Why quantitative approaches?</h2>
 <ul>
-<li>Both qualitative and quantitative approaches have their place (often the most interesting work has a little of both).</li>
-<li>When conducting quantitative analysis, we are subject to issues such as data quality, measurement, and relevance.</li>
-<li>In exchange we get reproducibility (hopefully), uncertainty measures (hopefully), repeatability (hopefully) and the ability to scale (hopefully)</li>
+<li>Both qualitative and quantitative approaches have their place.</li>
+<li>Quantitative analysis:
+<ol type="1">
+<li>Data quality</li>
+<li>Measurement</li>
+<li>Relevance</li>
+</ol></li>
+<li>In exchange we (hopefully) get reproducibility, uncertainty measures, repeatability, and the ability to scale.</li>
 </ul>
 <aside class="notes">
 <ul>
+<li>Both qualitative and quantitative approaches have their place (often the most interesting work has a little of both).</li>
+<li>When conducting quantitative analysis, we are subject to issues such as data quality, measurement, and relevance.</li>
 <li>Reproducibility is the ability to have another person redo the results of an analysis. It means that everything that was done—all of it, end-to-end—can be independently redone. Builds trust and credibility in findings.</li>
 <li>Small things that can help include: documenting code, version control, and sharing data. It’s a great reason for interdisciplinary teams because aspects that are difficult for social scientists can be easy for, say, computer scientists or engineers and vice versa.</li>
 <li>Capturing accurate data can be a challenge. If you consider nothing else then understanding and accounting for measurement error.</li>
@@ -817,10 +824,30 @@ Rohan Alexander
 <span id="cb1-17"><a href=""></a>    <span class="fu">sample</span>(vocab, <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">collapse =</span> <span class="st">" "</span></span>
 <span id="cb1-18"><a href=""></a>  )))</span>
 <span id="cb1-19"><a href=""></a></span>
-<span id="cb1-20"><a href=""></a>analysis_dataset</span>
-<span id="cb1-21"><a href=""></a></span>
-<span id="cb1-22"><a href=""></a><span class="do">#### Save data ####</span></span>
-<span id="cb1-23"><a href=""></a><span class="fu">write_csv</span>(analysis_dataset, <span class="st">"simulated_dataset.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-20"><a href=""></a><span class="do">#### Save data ####</span></span>
+<span id="cb1-21"><a href=""></a><span class="fu">write_csv</span>(analysis_dataset, <span class="st">"simulated_dataset.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="simulating-data-cont." class="slide level2">
+<h2>Simulating data (cont.)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>analysis_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 181 × 2
+   date       minutes                                                           
+   &lt;date&gt;     &lt;chr&gt;                                                             
+ 1 2025-06-03 was around including demand inflation australia were per labour t…
+ 2 2025-05-06 tariffs noted they for this levels be rate had would basis was bu…
+ 3 2025-04-01 international for they over data australia growth household meeti…
+ 4 2025-03-04 growth meeting the response economy this to growth trade trade ex…
+ 5 2025-02-04 tariffs little international inflation developments for prices wa…
+ 6 2025-01-07 forecast not more data meeting expectations on labour expectation…
+ 7 2024-12-03 of this early members global might that were basis target economy…
+ 8 2024-11-05 risks activity inflation basis on members cash it but levels trad…
+ 9 2024-10-01 demand growth response household trade remained as us could consu…
+10 2024-09-03 activity were had the been markets noted growth other their have …
+# ℹ 171 more rows</code></pre>
+</div>
 </div>
 </section>
 <section id="concluding-remarks" class="slide level2">

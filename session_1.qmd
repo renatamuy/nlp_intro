@@ -27,7 +27,7 @@ format:
 - 4x 30 min sessions: 
   - Each with one part conceptual and one part coding. 
   - 10 min break between each.
-- Code and slides are available: LINK
+- Code and slides are available: <https://github.com/RohanAlexander/nlp_intro>
 
 ::: {.notes}
 :::
@@ -254,7 +254,6 @@ Effective communication involves communicating:
 
 ![](analysis_figure.jpeg){width=300 fig-align="center"}
 
-
 ## Project set-up
 #### `https://github.com/rohanalexander/starter_folder`
 
@@ -285,13 +284,25 @@ analysis_dataset <-
     sample(vocab, 1000, replace = TRUE), collapse = " "
   )))
 
-analysis_dataset
-
 #### Save data ####
 write_csv(analysis_dataset, "simulated_dataset.csv")
 ```
 
+## Simulating data (cont.)
 
+```{r}
+#| eval: true
+#| echo: false
+
+analysis_dataset <- read_csv("simulated_dataset.csv")
+```
+
+```{r}
+#| eval: true
+#| echo: true
+
+analysis_dataset
+```
 
 ## Concluding remarks
 
@@ -300,6 +311,5 @@ write_csv(analysis_dataset, "simulated_dataset.csv")
 - You need to learn to stick with it. 
 - Planning, and being as specific as possible, can help guide the process.
 - There is hardly anything that we know for certain, and there is no perfect analysis. Instead our papers are about telling a story.
-
 
 # Break

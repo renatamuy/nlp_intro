@@ -224,6 +224,8 @@ rohans_data |>
 
 # Coding
 
+---
+
 ## Acquire
 
 - Data: 
@@ -232,6 +234,8 @@ rohans_data |>
 ::: {.notes}
 - 
 :::
+
+---
 
 ## Scrape the pages
 
@@ -268,6 +272,20 @@ walk2(urls, dest_files, ~ {
   Sys.sleep(5)
 })
 ```
+
+---
+
+## Scrape the pages
+
+![](files.png){width=300 fig-align="center"}
+
+---
+
+## Scrape the pages
+
+![](rba_content.png){width=300 fig-align="center"}
+
+---
 
 ## Put them into a dataset
 

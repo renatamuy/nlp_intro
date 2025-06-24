@@ -16,7 +16,7 @@ minutes_df = pd.read_csv('data/minutes_tbl.csv')
 
 # The prompt
 # Change this and see how it performs differently e.g. try adding You should be concise. Focus on whether the main cause was domestic or international and whether it was economic or financial. One or two words only. 
-SYSTEM_PROMPT = "You are an expert summarizer of central bank meeting minutes. Given the following meeting minutes, extract and state the main reason for the monetary policy decision. You should be concise. One or two words only. Focus on whether the main cause was domestic or international and whether it was economic or financial."
+SYSTEM_PROMPT = "You are an expert summarizer of central bank meeting minutes. Given the following meeting minutes, extract and state the main reason for the monetary policy decision."
 
 results = []
 

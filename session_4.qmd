@@ -29,6 +29,8 @@ library(tidyverse)
 ::: {.notes}
 :::
 
+---
+
 ## Word embeddings (cont.)
 
 - In the ngrams situation we knew that New South Wales could actually be `New_South_Wales` because we know it's a place. Embeddings learn that New South Wales should be kept together because "New" and "South" and "Wales" all occur close to each other commonly.
@@ -36,6 +38,8 @@ library(tidyverse)
 
 ::: {.notes}
 :::
+
+---
 
 ## Pre-trained word embeddings (cont.)
 
@@ -55,10 +59,8 @@ library(tidyverse)
 - LLMs start with token embeddings and then each layer adds more context.
 - There is a post-training phase where results are compared and better results are prioritized.
 
-
 ::: {.notes}
 :::
-
 
 ---
 
@@ -116,25 +118,18 @@ Would this be a good benchmark?
 
 - Create an account `https://platform.openai.com` and get an API key.
 - Add the key to your session.
-- `usyd/minutes_reasons.py`
+- `minutes_reasons.py`
 
 ---
 
-
 ## Can we use this to answer our question?
-
 
 ```{r}
 library(tidyverse)
 
-data <- read_csv("usyd/data/minutes_main_reasons.csv")
+data <- read_csv("data/minutes_main_reasons.csv")
 
 data |> 
-  mutate(
-    main_reason = 
-      if_else(
-        main_reason %in% c("Domestic demand", "Domestic conditions"),
-        "Domestic", main_reason)) |> 
   ggplot(aes(x = date, y = main_reason)) +
   geom_point(size = 5) +
   theme_classic() +
@@ -147,6 +142,18 @@ data |>
 
 ---
 
+## Next steps
+
+- We were somewhat able to answer our initial question.
+- To make more progress we would want:
+  - Create a representative benchmark.
+  - Scrape all the minutes, not just the most recent 10.
+  - Use the benchmark to optimize model and prompt.
+  - Improve the research question!
+    - Should whether the interest is changing matter? 
+    - Should the party in power matter? etc
+
+---
 
 ## Concluding remarks
 
@@ -154,6 +161,8 @@ data |>
 - Manually code a representative selection.
 - Simulate and then update.
 - Develop benchmarks.
+
+---
 
 ## Recommended reading
 
@@ -163,6 +172,8 @@ data |>
 - Hvitfeldt, Emil, and Julia Silge, *Supervised Machine Learning for Text Analysis in R*
 - Jurafsky, Dan, and James H. Martin, *Speech and Language Processing*
 - Lewis, Crystal, *Data Management in Large-Scale Education Research*
+
+---
 
 # Done!
 
