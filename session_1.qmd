@@ -1,0 +1,305 @@
+---
+title: "Text as data"
+subtitle: "1st session"
+author: "Rohan Alexander"
+date: "25 June, 2025"
+format:
+  revealjs:
+    slide-number: true
+---
+
+# Getting started
+
+## Background
+
+- Thank you Francesco and the Centre for AI, Trust and Governance! 🙏
+- Assistant professor, University of Toronto (Faculty of Information and the Department of Statistical Sciences). 
+- Research focus is on developing workflows that improve the trustworthiness of data science, especially focused on the role of code and testing.
+- PhD in economic history from the ANU.
+
+::: {.notes}
+:::
+
+---
+
+## Today's plan
+
+- 4x 30 min sessions: 
+  - Each with one part conceptual and one part coding. 
+  - 10 min break between each.
+- Code and slides are available: LINK
+
+::: {.notes}
+:::
+
+---
+
+# Conceptual
+
+
+```{r setup}
+#| eval: true
+#| echo: false
+
+library(tidyverse)
+```
+
+---
+
+## Introduction
+
+- Stories are a powerful tool for communicating and they persist through history.
+- Stories are also useful when we deal with data.
+- It turns data into meaningful narratives, enabling decision-making.
+- Publishing papers is basically trying to tell stories.
+
+---
+
+## Workflow
+
+:::: {.columns}
+
+::: {.column width="60%"}
+The workflow for telling stories with data includes five essential steps:
+
+1. Plan
+2. Simulate
+3. Acquire
+4. Explore
+5. Share
+:::
+
+::: {.column width="40%"}
+![](tellingstorieswithdatapainting.png){width=300 fig-align="center"}
+:::
+
+::::
+
+
+::: {.notes}
+1. **Plan**: Define the end-point.
+2. **Simulate**: Create simulated datasets to think about outcomes and understand data properties.
+3. **Acquire**: Collect and process the actual data.
+4. **Explore**: Perform data analysis to better understand the data.
+5. **Share**: Communicate findings through visualizations, reports, or presentations.
+:::
+
+::: {.notes}
+:::
+
+---
+
+## Defining a research question
+
+- Two approaches:
+  1. Data-driven
+  2. Theory-driven
+- (Secret third) Methods-driven
+
+Consider:
+
+- Counterfactuals and bias
+- Characteristics of good questions
+- Refinement process
+
+::: {.notes}
+- **Characteristics of good questions**: Clear, focused, and answerable with data.
+- **Refinement Process**: Iteratively refining questions based on data availability and initial findings.
+:::
+
+---
+
+
+## Why quantitative approaches?
+
+- Both qualitative and quantitative approaches have their place.
+- Quantitative analysis: 
+  1. Data quality
+  2. Measurement
+  3. Relevance
+- In exchange we (hopefully) get reproducibility, uncertainty measures, repeatability, and the ability to scale.
+
+::: {.notes}
+- Both qualitative and quantitative approaches have their place (often the most interesting work has a little of both).
+- When conducting quantitative analysis, we are subject to issues such as data quality, measurement, and relevance. 
+- Reproducibility is the ability to have another person redo the results of an analysis. It means that everything that was done—all of it, end-to-end—can be independently redone. Builds trust and credibility in findings.
+- Small things that can help include: documenting code, version control, and sharing data. It's a great reason for interdisciplinary teams because aspects that are difficult for social scientists can be easy for, say, computer scientists or engineers and vice versa.
+- Capturing accurate data can be a challenge. If you consider nothing else then understanding and accounting for measurement error.
+- For instance, consider height. We can, probably, all agree that we should take our shoes off before we measure height. But our height changes over the course of the day. And measuring someone’s height with a tape measure will give different results to using a laser. If we are comparing heights between people or over time, it therefore becomes important to measure at the same time each day, using the same method. But that quickly becomes unfeasible. 
+- **Data representation**: Understanding that data is a simplified version of reality.
+- **Implications**: Recognizing the limitations and ensuring interpretations are accurate.
+:::
+
+---
+
+
+
+## The workflow
+### Plan
+
+Planning involves:
+
+- Setting clear objectives
+- Understanding the audience
+- Defining key messages
+
+::: {.notes}
+- **Setting clear objectives**: Define what you want to achieve with the data story.
+- **Understanding the audience**: Know who your audience is, their level of expertise, and their needs.
+- **Defining key messages**: What are the main takeaways or insights?
+:::
+
+---
+
+## The workflow
+### Simulate
+
+Simulating involves:
+
+- Writing code to implement your planned dataset.
+- Thinking carefully about types and names.
+
+::: {.notes}
+- **Simulating Data**: Helps in understanding what the data should look like and preparing for potential challenges.
+- **Benefits**: Identifies potential data quality issues and informs data cleaning strategies.
+:::
+
+---
+
+## The workflow
+### Acquiring and preparing data
+
+- Data collection
+- Data preparation
+- Challenges
+
+::: {.notes}
+- **Data Collection**: Use appropriate methods to gather data from various sources.
+- **Data Preparation**: Involves cleaning, transforming, and structuring data to make it analysis-ready.
+- **Challenges**: Missing data, inconsistencies, and ensuring data validity.
+:::
+
+---
+
+## The workflow
+### Acquiring and preparing data (cont.)
+### Being overwhelmed
+
+> Perhaps all the dragons in our lives are princesses who are only waiting to see us act, just once, with beauty and courage. Perhaps everything that frightens us is, in its deepest essence, something helpless that wants our love.
+> 
+> Rilke
+
+
+::: {.notes}
+- **Dealing with big data**: Use techniques like sampling, aggregation, and dimensionality reduction.
+- **Managing small data**: Understand limitations and potential biases in small datasets.
+- **Tools and techniques**: Use software tools to manage and analyze large datasets efficiently.
+:::
+
+---
+
+## The workflow
+### Explore and understand
+
+- Descriptive statistics
+- Visual exploration
+- Statistical models
+
+::: {.notes}
+- **Descriptive statistics**: Calculate measures like mean, median, mode, and standard deviation to summarize data.
+- **Visual exploration**: Use plots and graphs to identify trends, patterns, and outliers.
+- **Statistical models**: Tools and approaches that we use to explore our dataset. They enable us to understand the dataset more clearly in a particular way..
+:::
+
+---
+
+## The workflow
+### Share
+
+Effective communication involves communicating: 
+
+- the decisions that we made, 
+- why we made them, 
+- our findings, and 
+- the weaknesses of our approach. 
+
+::: {.notes}
+- Simple analysis, communicated well, is more valuable than complicated analysis communicated poorly. This is because the latter cannot be understood or trusted by others.
+- Clear communication means writing in plain language with the help of tables, graphs, and models, in a way that brings the audience along with you. It means setting out what was done and why, as well as what was found. The minimum standard is that this is done to an extent such that another person can independently do what you did and find what you found.
+:::
+
+---
+
+# Coding
+
+## Plan
+
+- Initial research question: 
+  - What factors influence the monetary policy decision by the Reserve Bank of Australia?
+- Data: 
+  - Monetary policy minutes from RBA website `https://www.rba.gov.au/monetary-policy/rba-board-minutes/`
+
+::: {.notes}
+- 
+:::
+
+## Plan (cont.)
+### Analysis dataset
+
+![](analysis_dataset.jpeg){width=300 fig-align="center"}
+
+
+## Plan (cont.)
+### Analysis figure
+
+![](analysis_figure.jpeg){width=300 fig-align="center"}
+
+
+## Project set-up
+#### `https://github.com/rohanalexander/starter_folder`
+
+![](starter_folder_setup.png){width=300 fig-align="center"}
+
+## Simulating data
+
+```{r}
+#| eval: false
+#| echo: true
+
+#### Setup ####
+library(tidyverse)
+set.seed(853)
+
+#### Simulate dataset ####
+vocab <- c("the", "in", "to", "of", "that", "and", "had", "a", "was", "policy", "members", "on", "for", "be", "global", "rate", "inflation", "growth", "been", "at", "it", "by", "cash", "forecast", "than", "expected", "would", "this", "were", "more", "target", "meeting", "as", "monetary", "tariffs", "some", "also", "noted", "there", "developments", "domestic", "uncertainty", "australian", "reduction", "markets", "but", "could", "which", "economy", "their", "market", "they", "little", "lower", "trade", "range", "these", "an", "us", "time", "outlook", "not", "basis", "around", "or", "prices", "with", "might", "scenarios", "financial", "international", "impact", "higher", "still", "remained", "from", "baseline", "current", "have", "other", "consumption", "household", "labour", "per", "cent", "previous", "early", "expectations", "over", "including", "likely", "since", "demand", "data", "activity", "risks", "case", "conditions", "levels", "response", "australia")
+
+analysis_dataset <-
+  tibble(date = seq.Date(
+    from = as.Date("2025-06-01"),
+    to   = as.Date("2010-06-01"),
+    by   = "-1 month"
+  )) |>
+  mutate(date = date + (3 - lubridate::wday(date)) %% 7) |>
+  arrange(desc(date)) |>
+  mutate(minutes = map_chr(seq_len(n()), ~ str_c(
+    sample(vocab, 1000, replace = TRUE), collapse = " "
+  )))
+
+analysis_dataset
+
+#### Save data ####
+write_csv(analysis_dataset, "simulated_dataset.csv")
+```
+
+
+
+## Concluding remarks
+
+- Our world is messy, and so are our data. 
+- You need to become comfortable with the fact that the process will be difficult. 
+- You need to learn to stick with it. 
+- Planning, and being as specific as possible, can help guide the process.
+- There is hardly anything that we know for certain, and there is no perfect analysis. Instead our papers are about telling a story.
+
+
+# Break

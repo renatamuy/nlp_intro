@@ -1,0 +1,320 @@
+---
+title: "Text as data"
+subtitle: "2nd session"
+author: "Rohan Alexander"
+date: "25 June, 2025"
+format:
+  revealjs:
+    slide-number: true
+---
+
+# Conceptual
+
+```{r setup}
+#| eval: true
+#| echo: false
+
+library(tidyverse)
+library(rvest)
+```
+
+---
+
+## Data gathering
+
+> There is the famous story by Eddington about some people who went fishing in the sea with a net. Upon examining the size of the fish they had caught, they decided there was a minimum size to the fish in the sea! Their conclusion arose from the tool used and not from reality.
+
+::: {.notes}
+- **Data representation**: Understanding that data is a simplified version of reality.
+- **Implications**: Recognizing the limitations and ensuring interpretations are accurate.
+:::
+
+---
+
+## Sampling essentials
+
+- Statistics helps us make sensible claims based on samples.
+- We almost never have all the data that we would like.
+- Important to understand implications of sampling methods.
+
+:::{.notes}
+- Wu and Thompson (2020, 3) describe statistics as "the science of how to collect and analyze data and draw statements and conclusions about unknown populations." Here "population" is used in a statistical sense and refers to some infinite group that we can never know exactly, but that we can use the probability distributions of random variables to describe the characteristics of. 
+:::
+
+---
+
+
+## Key terminology and concepts
+
+- Target population
+- Sampling frame
+- Sample
+- Two main types of sampling:
+  - Probability sampling
+  - Non-probability sampling
+
+:::{.notes}
+- Target population: The entire group we're interested in.
+- Sampling frame: A list of items from the target population we can sample from.
+- Sample: The actual items we collect data on.
+- Two main types of sampling:
+  - Probability sampling
+  - Non-probability sampling
+- Both types have important roles in data collection.
+- Consider if we want to speak to the titles of all the books ever written. Our target population is all books ever written. But it is almost impossible for us to imagine that we could get information about the title of a book that was written in the nineteenth century, but that the author locked in their desk and never told anyone about. 
+- One sampling frame could be all books in the Library of Congress Online Catalog, another could be the 25 million books that were digitized by Google (Somers 2017). 
+- Our sample may be the tens of thousands of books that are available through Project Gutenberg, which we will use in later chapters.
+- Can be challenging due to complexities.
+- Examples:
+  - Determining who qualifies as a "university student."
+  - Classifying someone as a "smoker."
+- “Probability sampling”: Every unit in the sampling frame has some known chance of being sampled and the specific sample is obtained randomly based on these chances. The chance of being sampled does not necessarily need to be same for each unit.
+- “Non-probability sampling”: Units from the sampling frame are sampled based on convenience, quotas, judgement, or other non-random processes.
+- Often the difference between probability and non-probability sampling is one of degree. For instance, we usually cannot forcibly obtain data, and so there is almost always an aspect of volunteering on the part of a respondent.
+:::
+
+---
+
+## Probability sampling methods
+
+1. Simple random sampling
+2. Systematic sampling
+3. Stratified sampling
+4. Cluster sampling
+
+:::{.notes}
+1. Simple random sampling: Equal chance for all units.
+2. Systematic sampling: Select every kth unit.
+3. Stratified sampling: Divide population into strata and sample within each.
+4. Cluster sampling: Divide into clusters, then sample clusters.
+- We use stratification to help with the efficiency of sampling or with the balance of the survey.
+- Like strata, clusters are collectively exhaustive and mutually exclusive. Our examples from earlier of states, departments, and age-groups remain valid as clusters. 
+- It is our intention toward these groups that is different. Specifically, with cluster sampling, we do not intend to collect data from every cluster, whereas with stratified sampling we do. 
+:::
+
+---
+
+## Best practices and challenges in data gathering
+
+- There are many settings where data are available, but they are not explicitly being provided for the purposes of data analysis.
+- Documentation is key
+- Challenges in data gathering
+- Why gather data?
+
+:::{.notes}
+- Best practices for data gathering
+    - Be transparent about where and how data was gathered.
+    - Ensure that gathered data is properly documented and reproducible.
+- Documentation is key
+    - Keep records of where the data came from and how it was processed.
+    - This ensures that others can replicate your findings.
+- Challenges in data gathering
+    - Ethical concerns, technical hurdles, and managing unstructured data.
+    - Use proper tools and approaches to mitigate challenges.
+- Why gather data?
+    - Provides access to unique insights that wouldn’t be available otherwise.
+    - Unlocks the potential to answer novel research questions.
+:::
+
+---
+
+## Web scraping
+
+- Web scraping extracts data from web pages.
+- We can use it when there is no API available.
+- Generally not illegal, but requires careful attention to ethics and legality.
+- Privacy often trumps reproducibility. 
+- Requires ethics approval in Australian universities?
+
+:::{.notes}
+- Privacy often trumps reproducibility. There is also a considerable difference between data being publicly available on a website and being scraped, cleaned, and prepared into a dataset which is then publicly released. 
+- For instance, Kirkegaard and Bjerrekær (2016) scraped publicly available OKCupid profiles and then made the resulting dataset easily available (Hackett 2016). 
+- Zimmer (2018) details some of the important considerations that were overlooked including “minimizing harm”, “informed consent”, and ensuring those in the dataset maintain “privacy and confidentiality”. 
+- While it is correct to say that OKCupid made data public, they did so in a certain context, and when their data was scraped that context was changed.
+:::
+
+---
+
+## Principles of web scraping
+
+- Avoid it where possible.
+- Ensure scraping aligns with project values: transparency, fairness, and ethical behavior.
+- Legal issues should be considered, and respect for website terms of use is vital.
+- Always respect data ownership and intellectual property.
+- Give credit where due, particularly for scraped or gathered data.
+
+:::{.notes}
+- Avoid it. Try to use an API wherever possible.
+- Abide by their desires. Some websites have a “robots.txt” file that contains information about what they are comfortable with scrapers doing. In general, if it exists, a “robots.txt” file can be accessed by appending “robots.txt” to the base URL. For instance, the “robots.txt” file for https://www.google.com, can be accessed at https://www.google.com/robots.txt. Note if there are folders listed against “Disallow:”. These are the folders that the website would not like to be scraped. And also note any instances of “Crawl-delay:”. This is the number of seconds the website would like you to wait between visits.
+- Reduce the impact.
+- Slow down the scraper, for instance, rather than having it visit the website every second, slow it down using sys.sleep(). If you only need a few hundred files, then why not just have it visit the website a few times a minute, running in the background overnight?
+- Consider the timing of when you run the scraper. For instance, if you are scraping a retailer then maybe set the script to run from 10pm through to the morning, when fewer customers are likely using the site. Similarly, if it is a government website and they have a regular monthly release, then it might be polite to avoid that day.
+- Take only what is needed. For instance, you do not need to scrape the entirety of Wikipedia if all you need is the names of the ten largest cities in Croatia. This reduces the impact on the website, and allows us to more easily justify our actions.
+- Only scrape once. This means you should save everything as you go so that you do not have to re-collect data when the scraper inevitably fails at some point. For instance, you will typically spend a lot of time getting a scraper working on one page, but typically the page structure will change at some point and the scraper will need to be updated. Once you have the data, you should save that original, unedited data separately to the modified data. If you need data over time then you will need to go back, but this is different than needlessly re-scraping a page.
+- Do not republish the pages that were scraped (this contrasts with datasets that you create from it).
+- Take ownership and ask permission if possible. At a minimum all scripts should have contact details in them. Depending on the circumstances, it may be worthwhile asking for permission before you scrape.
+:::
+
+---
+
+## Tools for web scraping
+
+- Scraping takes advantage of HTML/CSS.
+```
+<b>My bold text</b>
+
+<ul>
+  <li>Learn webscraping</li>
+  <li>Do data science</li>
+  <li>Profit</li>
+</ul>
+```
+- We draw on `rvest`.
+- Use selector gadget - `https://selectorgadget.com` - to get the tag that you need.
+
+:::{.notes}
+- Web scraping is possible by taking advantage of the underlying structure of a webpage. 
+- We use patterns in the HTML/CSS to get the data that we want. 
+- To look at the underlying HTML/CSS we can either: open a browser, right-click, and choose something like “Inspect”; or save the website and then open it with a text editor rather than a browser.
+
+```{r}
+#| eval: false
+
+website_extract <- "<p>Hi, I’m <b>Rohan</b> Alexander.</p>"
+rohans_data <- read_html(website_extract)
+
+rohans_data
+
+rohans_data |>
+  html_elements("b")
+
+rohans_data |>
+  html_elements("b") |>
+  html_text()
+```
+:::
+
+---
+
+## Research ethics
+
+- Data privacy
+- Bias and fairness
+- Transparency
+- What is ethics?
+
+::: {.notes}
+- **Data privacy**: Protecting personal information.
+- Who is in the dataset, who is missing, and why? To what extent will our story perpetuate the past? And is this something that ought to happen?
+- **Bias and fairness**: Identifying and mitigating biases in datasets.
+- **Transparency**: Being open about data sources, methods, and limitations.
+- Finally environmental impacts tend to be a big concern, especially as models and data scale up.
+- There are many definitions of ethics, but when it comes to telling stories with data, at a minimum it means considering the full context of the dataset.
+:::
+
+---
+
+## Double scrape
+
+- Interestingly, it is surprisingly common to need to do a double scrape:
+  1. Scrape pages to get the links that will be needed.
+  2. Scrape those links.
+
+---
+
+# Coding
+
+## Acquire
+
+- Data: 
+  - Monetary policy minutes are available from the RBA website: `https://www.rba.gov.au/monetary-policy/rba-board-minutes/`
+
+::: {.notes}
+- 
+:::
+
+## Scrape the pages
+
+```{r}
+#| eval: false
+#| echo: true
+
+urls <-
+  c(
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2025/2025-05-20.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2025/2025-04-01.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2025/2025-02-18.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-12-10.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-11-05.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-09-24.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-08-06.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-06-18.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-05-07.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-03-19.html",
+    "https://www.rba.gov.au/monetary-policy/rba-board-minutes/2024/2024-02-06.html"
+    )
+
+# Get the date part
+dest_files <-
+  urls |>
+  basename()
+
+# Go through each file and get the content part
+walk2(urls, dest_files, ~ {
+  read_html(.x) |>
+    html_element("#content") |>
+    as.character() |>
+    write_lines(.y)
+  Sys.sleep(5)
+})
+```
+
+## Put them into a dataset
+
+```{r}
+#| eval: false
+#| echo: true
+
+html_files <- 
+  c("2024-02-06.html", "2024-03-19.html", "2024-05-07.html", "2024-06-18.html", "2024-08-06.html", "2024-09-24.html", "2024-11-05.html", "2024-12-10.html", "2025-02-18.html", "2025-04-01.html", "2025-05-20.html")
+
+minutes_tbl <-
+  tibble(
+    date = html_files |>
+      str_remove("\\.html$") |>
+      as.Date(),
+    text = html_files |>
+      map_chr( ~ read_html(.x) |>
+                 html_text2() |>
+                 str_squish())
+  ) |>
+  arrange(date)
+
+write_csv(minutes_tbl, "minutes_tbl.csv")
+```
+
+## Put them into a dataset
+
+```{r}
+#| eval: true
+#| echo: false
+
+minutes_tbl <- read_csv("minutes_tbl.csv")
+```
+
+```{r}
+#| eval: true
+#| echo: true
+
+minutes_tbl
+```
+
+
+## Concluding remarks
+
+- Scraping data provides us with exciting data we can use to answer questions that we'd not otherwise be able to answer.
+- But websites are rarely provided for us to scrape so we should be respectful.
+- Save as you go and do the manipulation at the end.
+- Consider appropriate sampling to ensure you get a representative sample.
+
+# Break

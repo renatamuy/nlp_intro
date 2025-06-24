@@ -1,0 +1,168 @@
+---
+title: "Text as data"
+subtitle: "4th session"
+author: "Rohan Alexander"
+date: "25 June, 2025"
+format:
+  revealjs:
+    slide-number: true
+---
+
+# Conceptual
+
+```{r setup}
+#| eval: true
+#| echo: false
+
+library(tidyverse)
+```
+
+---
+
+## Word embeddings
+
+- Many of the tf-idf entries are going to be zero, and this will increase as our corpus grows.
+- Word embeddings are a representation of the relationships between words.
+- Words that commonly occur close to each other in a corpus will be located closer together in a n-dimensional graph.
+- "Birds of a feather flock together".
+
+::: {.notes}
+:::
+
+## Word embeddings (cont.)
+
+- In the ngrams situation we knew that New South Wales could actually be `New_South_Wales` because we know it's a place. Embeddings learn that New South Wales should be kept together because "New" and "South" and "Wales" all occur close to each other commonly.
+- In the same way that we created n-grams of different sizes: bi-gram: "South Australia", tri-gram: "New South Wales", we can allow different sized windows - smaller are faster, but larger learn context.
+
+::: {.notes}
+:::
+
+## Pre-trained word embeddings (cont.)
+
+- We need a large corpus and compute to create embeddings, and so it's common to use embeddings created by someone else. 
+  - GloVe was trained on Wikipedia and news in 2014.
+  - ELMo and BERT, both 2018, were trained on books and Wikipedia, and context matters so words with the same spelling could have different representations.
+
+::: {.notes}
+:::
+
+---
+
+## Large Language Models
+
+- The cat in the ____.
+- The ____ in the hat.
+- LLMs start with token embeddings and then each layer adds more context.
+- There is a post-training phase where results are compared and better results are prioritized.
+
+
+::: {.notes}
+:::
+
+
+---
+
+## Benchmarks
+
+- Ultimately, LLMs are statistical models.
+- To assess performance, we create benchmarks that are collections of known inputs with desired outputs.
+- We need to be able to quickly compare the LLM output with the desired output:
+  1. Human evaluation
+  2. LLM evaluation
+  3. Run it!
+- Statistical sampling (from Session 1) becomes important in order to evaluate the appropriateness of the benchmark.
+
+::: {.notes}
+- This is one reason why LLMs have been so quickly adopted in situations that require code.
+- If you want to allow or encourage development on some aspect of interest to you, then the best starting point would be to create a benchmark.
+:::
+
+---
+
+## Benchmarks (cont.)
+
+```{r}
+tibble(inputs = c("1+1", "1+2", "...", "0981489181+1981230578324"),
+       desired_output = c("2", "3", "...", "1,982,212,067,505"),
+       )
+```
+
+Would this be a good benchmark?
+
+
+::: {.notes}
+
+:::
+
+---
+
+## What makes a good benchmark?
+
+- Clearly answerable questions.
+- Ability to generalize outside the benchmark.
+- Can evaluate a range of abilities.
+
+::: {.notes}
+
+:::
+
+---
+
+# Coding
+
+---
+
+## OpenAI API interaction
+
+- Create an account `https://platform.openai.com` and get an API key.
+- Add the key to your session.
+- `usyd/minutes_reasons.py`
+
+---
+
+
+## Can we use this to answer our question?
+
+
+```{r}
+library(tidyverse)
+
+data <- read_csv("usyd/data/minutes_main_reasons.csv")
+
+data |> 
+  mutate(
+    main_reason = 
+      if_else(
+        main_reason %in% c("Domestic demand", "Domestic conditions"),
+        "Domestic", main_reason)) |> 
+  ggplot(aes(x = date, y = main_reason)) +
+  geom_point(size = 5) +
+  theme_classic() +
+  theme(text = element_text(size = 30),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "Date",
+       y = "Reason")
+
+```
+
+---
+
+
+## Concluding remarks
+
+- Always look at the data.
+- Manually code a representative selection.
+- Simulate and then update.
+- Develop benchmarks.
+
+## Recommended reading
+
+- Alammar, Jay, and Maarten Grootendorst, *Hands-On Large Language Models*
+- Boykis, Vicky, *What are embeddings*
+- Huyen, Chip, *AI Engineering*
+- Hvitfeldt, Emil, and Julia Silge, *Supervised Machine Learning for Text Analysis in R*
+- Jurafsky, Dan, and James H. Martin, *Speech and Language Processing*
+- Lewis, Crystal, *Data Management in Large-Scale Education Research*
+
+# Done!
+

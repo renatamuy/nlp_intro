@@ -1,0 +1,513 @@
+---
+title: "Text as data"
+subtitle: "3rd session"
+author: "Rohan Alexander"
+date: "25 June, 2025"
+format:
+  revealjs:
+    slide-number: true
+---
+
+# Conceptual
+
+```{r setup}
+#| eval: true
+#| echo: false
+
+library(astrologer)
+library(quanteda)
+library(stm)
+library(tidytext)
+library(tidyverse)
+```
+
+---
+
+## Natural language processing
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Earlier approaches (such as topic models, covered this session) to the analysis of text tend to convert words into numbers, divorced of context.
+- More recent methods (such as embeddings and LLMs, covered next session) try to take advantage of the structure inherent in text.
+:::
+
+::: {.column width="50%"}
+![](crocsandtrees.png){width=400 fig-align="center"}
+:::
+
+::::
+
+::: {.notes}
+- Earlier approaches to the analysis of text tend to convert words into numbers, divorced of context. They could then be analyzed using traditional approaches, such as variants of logistic regression. 
+- More recent methods try to take advantage of the structure inherent in text, which can bring additional meaning.
+- The difference is perhaps like a child who can group similar colors, compared with a child who knows what objects are; although both crocodiles and trees are green, and you can do something with that knowledge, it is useful to know that a crocodile could eat you while a tree probably would not.
+:::
+
+---
+
+## Document-feature matrix
+
+- A document-feature matrix has documents in each observation, words in each column, and a count for each combination, along with associated metadata. 
+- After we have some data, we construct a corpus and then use the tokens in the corpus to construct a document-feature matrix (DFM).
+
+---
+
+## Document-feature matrix (example)
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+last_samurai <-"My father's father was a Methodist minister."
+
+beloved <- "124 was spiteful. Full of Baby's venom."
+
+jane_eyre <- "There was no possibility of taking a walk that day."
+
+bookshelf <-
+  tibble(
+    book = c("Last Samurai", "Beloved", "Jane Eyre"),
+    first_sentence = c(last_samurai, beloved, jane_eyre)
+  )
+
+bookshelf |> 
+  knitr::kable()
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+books_corpus <-
+  corpus(bookshelf, 
+         docid_field = "book", 
+         text_field = "first_sentence")
+
+#books_corpus
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+books_dfm <-
+  books_corpus |>
+  tokens() |>
+  dfm()
+
+books_dfm
+```
+
+::: {.notes}
+- For instance, if our corpus was the text from Airbnb reviews, then each document may be a review, and typical features could include: "The", "Airbnb", "was", "great". Notice here that the sentence has been split into different words. We typically talk of "tokens" to generalize away from words, because of the variety of aspects we may be interested in, but words are commonly used.\index{text!tokens}
+:::
+
+---
+
+## Stop words
+
+- Stop words are words such as "the", "and", and "a". 
+- A common step of preparing a text dataset used to be to remove stop words. We now know that stop words can have a great deal of meaning. 
+- There are many different lists of stop words that have been put together by others, such as the "snowball" list.
+```{r}
+#| echo: false
+
+stopwords(source = "snowball")[1:10]
+```
+- If we decide to use stop words then we often need to augment such lists with project-specific words. 
+
+
+::: {.notes}
+- For a long time stop words were not thought to convey much meaning, and there were concerns around memory-constrained computation. 
+- We can do this by creating a count of individual words in the corpus, and then sorting by the most common and adding those to the stop words list as appropriate.
+:::
+
+---
+
+## Case, numbers, and punctuation
+
+- There are times when all we care about is the word, not the case or punctuation. For instance, if the text corpus was particularly messy or the existence of particular words was informative.
+- We trade-off the loss of information for the benefit of making things simpler.
+- One trick, is to remove all letters, numbers, and punctuation; remove everything that we are used to, leaving only that which we are not.
+
+
+::: {.notes}
+:::
+
+---
+
+
+## Typos and uncommon words
+
+- Then we need to decide what to do about typos and other minor issues. 
+- The use of Optical Character Recognition (OCR) will introduce common issues as well, such as "the" is commonly incorrectly recognized as "thc".
+- We could fix typos in the same way that we fixed stop words, i.e. with lists of corrections. 
+
+::: {.notes}
+- Sometimes these should clearly be fixed. 
+- But if they are made in a systematic way, for instance, a certain writer always makes the same mistakes, then they could have value if we were interested in grouping by the writer.
+- When it comes to uncommon words, we can build this into our document-feature matrix creation, for instance to remove any word that does not occur at least twice, or to remove any word that is not in at least five per cent of documents, or to remove any word that is in at least 90 per cent of documents.
+:::
+
+---
+
+## Tuples (known)
+
+- A tuple is an ordered list of elements. In the context of text it is a series of words.
+- If the tuple comprises two words, then we term this a "bi-gram", three words is a "tri-gram", etc. 
+- This is a clear issue when it comes to place names.
+
+```{r}
+a_place <- c("New South Wales")
+
+a_place
+
+a_sentence <-
+  c("Sydney is in New South Wales and Toronto is not.")
+
+a_sentence
+
+tokens(a_sentence) |>
+  tokens_compound(pattern = phrase(a_place))
+```
+
+::: {.notes}
+These are an issue when it comes to text cleaning and preparation because we often separate terms based on a space. This would result in an inappropriate separation.
+:::
+
+## Tuples (unknown)
+
+- It might be that we were not sure what the common tuples were in the corpus and we need to identify words that commonly appear next to each other.
+
+```{r}
+#| eval: true
+#| echo: false
+
+jane_eyre <- read_csv(
+  "jane_eyre.csv",
+  col_types = cols(
+    gutenberg_id = col_integer(),
+    text = col_character()
+  )
+)
+
+stop_word_list <-
+  paste(stopwords(source = "snowball"), collapse = " | ")
+
+jane_eyre <- 
+  jane_eyre |> 
+  filter(!is.na(text))
+
+jane_eyre_text <- tibble(
+  book = "Jane Eyre",
+  text = paste(jane_eyre$text, collapse = " ") |>
+    str_replace_all(pattern = "[:punct:]",
+                    replacement = " ") |>
+    str_replace_all(pattern = stop_word_list,
+                    replacement = " ")
+)
+
+jane_eyre_corpus <-
+  corpus(jane_eyre_text, docid_field = "book", text_field = "text")
+ngrams <- tokens_ngrams(tokens(jane_eyre_corpus), n = 2)
+ngram_counts <-
+  tibble(ngrams = unlist(ngrams)) |>
+  count(ngrams, sort = TRUE)
+
+ngram_counts[1:4,] |> 
+  knitr::kable()
+```
+
+::: {.notes}
+- Having identified some common bi-grams, we could add them to the list to be changed. This example includes names like "Mr Rochester" and "St John" which would need to remain together for analysis.
+:::
+
+---
+
+## Term Frequency-Inverse Document Frequency (TF-IDF)
+
+- We might be interested in the words that are used to distinguish different documents. 
+- First look at a word's term frequency (TF), which is how many times a word is used for each zodiac sign. 
+- Then look at the inverse document frequency (IDF) in which we "penalize" words that occur for many zodiac signs. 
+- The term frequency–inverse document frequency (tf-idf) is then the product of these.
+
+---
+
+## TF-IDF (cont.)
+
+```{r}
+#| eval: true
+#| echo: false
+
+horoscopes_by_word <-
+  horoscopes |>
+  select(-startdate,-url) |>
+  unnest_tokens(output = word,
+                input = horoscope,
+                token = "words")
+
+horoscopes_counts_by_word <-
+  horoscopes_by_word |>
+  count(zodiacsign, word, sort = TRUE)
+
+horoscopes_counts_by_word_tf_idf <-
+  horoscopes_counts_by_word |>
+  bind_tf_idf(
+    term = word,
+    document = zodiacsign,
+    n = n
+  ) |>
+  arrange(-tf_idf)
+
+horoscopes_counts_by_word_tf_idf |> 
+  filter(!word %in% c("goat", "gemini", "pisces", "sagittarius", "cancer", "bulls", "let's", "capricorn", "capricorns")) |> 
+  slice(1:7) |> 
+  knitr::kable()
+```
+
+---
+
+## TF-IDF (cont.)
+
+```{r}
+horoscopes_counts_by_word_tf_idf |>
+  filter(!word %in% c("goat", "gemini", "pisces", "sagittarius", "cancer", "bulls", "let's", "capricorn", "capricorns", "taurus", "aries")) |> 
+  slice(1:5,
+        .by = zodiacsign) |>
+  select(zodiacsign, word) |>
+  summarise(all = paste0(word, collapse = "; "),
+            .by = zodiacsign) |> 
+  knitr::kable()
+```
+
+::: {.notes}
+:::
+
+---
+
+
+## Topic modelling
+
+- Topic models are useful when we have many statements and we want to create groups based on which sentences that use similar words. We consider those groups of similar words to define topics. 
+- While there are many variants, one way is to use the latent Dirichlet allocation (LDA) method.
+- The key assumption behind LDA is that for each statement, a document, is made by a person who decides the topics they would like to talk about in that document, and who then chooses words, terms, that are appropriate to those topics. 
+
+::: {.notes}
+- A topic could be thought of as a collection of terms, and a document as a collection of topics. The topics are not specified *ex ante*; they are an outcome of the method. 
+- Terms are not necessarily unique to a particular topic, and a document could be about more than one topic. This provides more flexibility than other approaches such as a strict word count method. The goal is to have the words found in documents group themselves to define topics.
+:::
+
+---
+
+## Latent Dirichlet Allocation (LDA)
+
+```{r}
+#| echo: false
+#| layout-ncol: 2
+
+topics <- c("topic 1", "topic 2", "topic 3", "topic 4", "topic 5")
+
+document_1 <- tibble(
+  Topics = topics,
+  Probability = c(0.40, 0.40, 0.1, 0.05, 0.05)
+)
+
+document_2 <- tibble(
+  Topics = topics,
+  Probability = c(0.01, 0.04, 0.35, 0.20, 0.4)
+)
+
+ggplot(document_1, aes(Topics, Probability)) +
+  geom_point(size = 5) +
+  theme_classic() +
+  coord_cartesian(ylim = c(0, 0.4)) +
+  theme(text = element_text(size = 30),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(document_2, aes(Topics, Probability)) +
+  geom_point(size = 5) +
+  theme_classic() +
+  coord_cartesian(ylim = c(0, 0.4)) +
+  theme(text = element_text(size = 30),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+::: {.notes}
+- LDA works by considering each document as having been generated by some probability distribution over topics. 
+- For instance, if there were five topics and two documents, then the first document may be comprised mostly of the first few topics; the other document may be mostly about the final few topics.
+:::
+
+---
+
+## LDA (cont.)
+
+```{r}
+#| echo: false
+#| layout-ncol: 2
+
+some_terms <- c(
+  "immigration", "race", "influx", "loans", "wealth", 
+  "saving", "chinese", "france", "british", "english")
+
+topic_1 <- tibble(
+  Terms = some_terms,
+  Probability = c(0.0083, 0.0083, 0.0083, 0.0083, 0.0083, 0.0083, 0.2, 0.15, 0.4, 0.2)
+)
+
+topic_2 <- tibble(
+  Terms = some_terms,
+  Probability = c(0.0142, 0.0142, 0.0142, 0.25, 0.35, 0.30, 0.0142, 0.0142, 0.0142, 0.0142)
+)
+
+ggplot(topic_1, aes(Terms, Probability)) +
+  geom_point(size = 5) +
+  theme_classic() +
+  coord_cartesian(ylim = c(0, 0.4)) +
+  theme(text = element_text(size = 30),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(topic_2, aes(Terms, Probability)) +
+  geom_point(size = 5) +
+  theme_classic() +
+  coord_cartesian(ylim = c(0, 0.4)) +
+  theme(text = element_text(size = 30),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+::: {.notes}
+- Similarly, each topic could be considered a probability distribution over terms. To choose the terms used in each document the speaker picks terms from each topic in the appropriate proportion. For instance, if there were ten terms, then one topic could be defined by giving more weight to terms related to immigration; and some other topic may give more weight to terms related to the economy.
+:::
+
+---
+
+## LDA (cont.)
+
+- After the documents are created, they are all that we can analyze. 
+- The term usage in each document is observed, but the topics are hidden, or "latent". We do not know the topics of each document, nor how terms defined the topics. 
+- In a sense we are trying to reverse the document generation process---we have the terms, and we would like to discover the topics.
+
+::: {.notes}
+- If we observe the terms in each document, then we can obtain estimates of the topics. The outcomes of the LDA process are probability distributions. It is these distributions that define the topics. Each term will be given a probability of being a member of a particular topic, and each document will be given a probability of being about a particular topic. 
+- The choice of the number of topics, $k$, affects the results, and must be specified *a priori*. If there is a strong reason for a particular number, then this can be used. Otherwise, one way to choose an appropriate number is to use a test and training set process. Essentially, this means running the process on a variety of possible values for *k* and then picking an appropriate value that performs well.
+- One weakness of the LDA method is that it considers a "bag of words" where the order of those words does not matter [@blei2012]. It is possible to extend the model to reduce the impact of the bag-of-words assumption and add conditionality to word order. Additionally, alternatives to the Dirichlet distribution can be used to extend the model to allow for correlation. 
+:::
+
+
+---
+
+# Coding
+
+---
+
+## Read in the data
+
+```{r readmins}
+#| echo: true
+#| eval: true
+
+minutes <-
+  read_csv(
+    "minutes_tbl.csv"
+    )
+
+minutes
+```
+
+
+---
+
+## Turn it into a corpus
+
+```{r makecorpus}
+#| echo: true
+
+minutes_corpus <-
+  corpus(minutes, 
+         docid_field = "date", 
+         text_field = "text")
+
+minutes_corpus
+```
+
+---
+
+## Create the DFM
+
+```{r tokenize}
+#| echo: true
+#| message: false
+#| warning: false
+
+minutes_dfm <-
+  minutes_corpus |>
+  tokens(
+    remove_punct = TRUE,
+    remove_symbols = TRUE
+  ) |>
+  dfm() |>
+  dfm_trim(min_termfreq = 2, min_docfreq = 2) |>
+  dfm_remove(stopwords(source = "snowball"))
+
+minutes_dfm
+```
+
+::: {.notes}
+We use the tokens in the corpus to construct a document-feature matrix. To make our life a little easier, computationally, we remove any word that does not occur at least twice, and any word that does not occur in at least two documents.
+:::
+
+---
+
+## Make a topic model
+
+```{r stm}
+#| echo: true
+#| eval: false
+
+minutes_topics <- stm(documents = minutes_dfm, K = 5)
+```
+
+
+```{r}
+#| echo: false
+#| eval: true
+
+minutes_topics <- read_rds(
+  file = "minutes_topics.rda"
+)
+
+minutes_topics
+```
+
+
+::: {.notes}
+At this point we can use `stm()` from `stm` to implement a LDA model.\index{latent Dirichlet allocation} We need to specify a document-feature matrix and the number of topics. Topic models are essentially just summaries. Instead of a document becoming a collection of words, they become a collection of topics with some probability associated with each topic. But because it is just providing a collection of words that tend to be used at similar times, rather than actual underlying meaning, we need to specify the number of topics that we are interested in. This decision will have a big impact, and we should consider a few different numbers.
+:::
+
+---
+
+## Look at the topics
+
+```{r lookattopics}
+#| echo: false
+#| eval: true
+
+labelTopics(minutes_topics)
+```
+
+
+::: {.notes}
+:::
+
+## Concluding remarks
+
+- Topic models and other approaches that consider words independently of their content can be useful. For instance, what was parliament talking about? What words distinguish the documents of one party compared with another?
+- There are a large number of decisions to be made in order to prepare the data.
+
+# Break
