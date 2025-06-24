@@ -27,7 +27,9 @@ format:
 - 4x 30 min sessions: 
   - Each with one part conceptual and one part coding. 
   - 10 min break between each.
-- Code and slides are available: <https://github.com/RohanAlexander/nlp_intro>
+- Code and slides: <https://github.com/RohanAlexander/nlp_intro>
+- Email: <rohan.alexander@utoronto.ca>
+- Website: <https://rohanalexander.com>
 
 ::: {.notes}
 :::

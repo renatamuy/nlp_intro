@@ -351,7 +351,6 @@ Rohan Alexander
 <li>Many of the tf-idf entries are going to be zero, and this will increase as our corpus grows.</li>
 <li>Word embeddings are a representation of the relationships between words.</li>
 <li>Words that commonly occur close to each other in a corpus will be located closer together in a n-dimensional graph.</li>
-<li>“Birds of a feather flock together”.</li>
 </ul>
 <aside class="notes">
 
@@ -387,6 +386,10 @@ Rohan Alexander
           display:block!important;
       }</style></aside>
 </section>
+<section id="word-embeddings-cont.-1" class="slide level2">
+<h2>Word embeddings (cont.)</h2>
+
+<img data-src="session_4_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
 <section id="pre-trained-word-embeddings-cont." class="slide level2">
 <h2>Pre-trained word embeddings (cont.)</h2>
 <ul>
@@ -395,6 +398,7 @@ Rohan Alexander
 <li>GloVe was trained on Wikipedia and news in 2014.</li>
 <li>ELMo and BERT, both 2018, were trained on books and Wikipedia, and context matters so words with the same spelling could have different representations.</li>
 </ul></li>
+<li>Those are publicly available through Hugging Face.</li>
 </ul>
 <aside class="notes">
 
@@ -413,10 +417,13 @@ Rohan Alexander
 <section id="large-language-models" class="slide level2">
 <h2>Large Language Models</h2>
 <ul>
+<li>Next word prediction by looking forward and backward turns out to be powerful at scale.
+<ul>
 <li>The cat in the ____.</li>
 <li>The ____ in the hat.</li>
+</ul></li>
 <li>LLMs start with token embeddings and then each layer adds more context.</li>
-<li>There is a post-training phase where results are compared and better results are prioritized.</li>
+<li>A post-training phase compares different results and rewards outcomes that score better.</li>
 </ul>
 <aside class="notes">
 
@@ -493,9 +500,11 @@ Rohan Alexander
 <section id="what-makes-a-good-benchmark" class="slide level2">
 <h2>What makes a good benchmark?</h2>
 <ul>
+<li>Representative sample.</li>
 <li>Clearly answerable questions.</li>
 <li>Ability to generalize outside the benchmark.</li>
 <li>Can evaluate a range of abilities.</li>
+<li>Domain experts helped create it.</li>
 </ul>
 <aside class="notes">
 
@@ -524,13 +533,13 @@ Rohan Alexander
 <ul>
 <li>Create an account <code>https://platform.openai.com</code> and get an API key.</li>
 <li>Add the key to your session.</li>
-<li><code>usyd/minutes_reasons.py</code></li>
+<li><code>minutes_reasons.py</code></li>
 </ul>
 </section>
 <section id="can-we-use-this-to-answer-our-question" class="slide level2">
 <h2>Can we use this to answer our question?</h2>
 
-<img data-src="session_4_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<img data-src="session_4_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
 <section id="next-steps" class="slide level2">
 <h2>Next steps</h2>
 <ul>
@@ -568,17 +577,19 @@ Rohan Alexander
 <li>Lewis, Crystal, <em>Data Management in Large-Scale Education Research</em></li>
 </ul>
 </section>
-<section class="slide level2">
-
-</section></section>
-<section id="done" class="title-slide slide level1 center">
-<h1>Done!</h1>
+<section id="contact" class="slide level2">
+<h2>Contact</h2>
+<ul>
+<li>Today’s content: <a href="https://github.com/RohanAlexander/nlp_intro" class="uri">https://github.com/RohanAlexander/nlp_intro</a></li>
+<li>Email: <a href="mailto:rohan.alexander@utoronto.ca" class="email">rohan.alexander@utoronto.ca</a></li>
+<li>Website: <a href="https://rohanalexander.com" class="uri">https://rohanalexander.com</a></li>
+</ul>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 

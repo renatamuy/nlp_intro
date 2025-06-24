@@ -24,7 +24,6 @@ library(tidyverse)
 - Many of the tf-idf entries are going to be zero, and this will increase as our corpus grows.
 - Word embeddings are a representation of the relationships between words.
 - Words that commonly occur close to each other in a corpus will be located closer together in a n-dimensional graph.
-- "Birds of a feather flock together".
 
 ::: {.notes}
 :::
@@ -41,11 +40,33 @@ library(tidyverse)
 
 ---
 
+## Word embeddings (cont.)
+
+```{r}
+embeddings <-
+  tibble(
+    word = c("USyd", "UofT", "Sydney", "Toronto", "apple", "banana"),
+    x = c(1, 2, 1, 2, 5, 6),
+    y = c(3, 3, 2, 2, 1, 1)
+  )
+
+ggplot(embeddings, aes(x, y, label = word)) +
+  geom_point(size = 5) +
+  geom_text(hjust = -0.2, vjust = -0.3, size = 5) +
+  scale_x_continuous(limits = c(0, 7), name = "Dimension 1") +
+  scale_y_continuous(limits = c(0, 4), name = "Dimension 2") +
+  theme(text = element_text(size = 30)) +
+  theme_classic()
+```
+
+---
+
 ## Pre-trained word embeddings (cont.)
 
 - We need a large corpus and compute to create embeddings, and so it's common to use embeddings created by someone else. 
   - GloVe was trained on Wikipedia and news in 2014.
   - ELMo and BERT, both 2018, were trained on books and Wikipedia, and context matters so words with the same spelling could have different representations.
+- Those are publicly available through Hugging Face.
 
 ::: {.notes}
 :::
@@ -54,10 +75,11 @@ library(tidyverse)
 
 ## Large Language Models
 
-- The cat in the ____.
-- The ____ in the hat.
+- Next word prediction by looking forward and backward turns out to be powerful at scale.
+  - The cat in the ____.
+  - The ____ in the hat.
 - LLMs start with token embeddings and then each layer adds more context.
-- There is a post-training phase where results are compared and better results are prioritized.
+- A post-training phase compares different results and rewards outcomes that score better.
 
 ::: {.notes}
 :::
@@ -100,9 +122,11 @@ Would this be a good benchmark?
 
 ## What makes a good benchmark?
 
+- Representative sample.
 - Clearly answerable questions.
 - Ability to generalize outside the benchmark.
 - Can evaluate a range of abilities.
+- Domain experts helped create it.
 
 ::: {.notes}
 
@@ -175,5 +199,9 @@ data |>
 
 ---
 
-# Done!
+## Contact
+
+- Today's content: <https://github.com/RohanAlexander/nlp_intro>
+- Email: <rohan.alexander@utoronto.ca>
+- Website: <https://rohanalexander.com>
 
