@@ -1,5 +1,5 @@
 ---
-title: "Text as data"
+title: "Getting started with Natural Language Processing"
 subtitle: "1st session"
 author: "Rohan Alexander"
 date: "25 June, 2025"
@@ -310,7 +310,6 @@ analysis_dataset
 
 - Our world is messy, and so are our data. 
 - You need to become comfortable with the fact that the process will be difficult. 
-- You need to learn to stick with it. 
 - Planning, and being as specific as possible, can help guide the process.
 - There is hardly anything that we know for certain, and there is no perfect analysis. Instead our papers are about telling a story.
 

@@ -1,5 +1,5 @@
 ---
-title: "Text as data"
+title: "Getting started with Natural Language Processing"
 subtitle: "4th session"
 author: "Rohan Alexander"
 date: "25 June, 2025"
@@ -170,7 +170,7 @@ data |>
 
 - We were somewhat able to answer our initial question.
 - To make more progress we would want:
-  - Create a representative benchmark.
+  - Create a representative benchmark (starting by improving the simulation).
   - Scrape all the minutes, not just the most recent 10.
   - Use the benchmark to optimize model and prompt.
   - Improve the research question!
