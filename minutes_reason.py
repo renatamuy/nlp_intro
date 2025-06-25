@@ -1,22 +1,29 @@
-import os
+# Code for Windows (Renata Muylaert, 2025, adapted for Windows from Rohan's course https://github.com/RohanAlexander/nlp_intro)
+
+# Python set up
+# First make sure you have Python packages in RStudio
+# Open RStudio Tools > Terminal and type
+# python -m pip install pandas
+# python -m pip install openai
+
+# OpenAI API set up
+# Make sure you have your API key set and secured from OpenAI API. DO NOT SHARE YOUR API KEY 
+# Make sure your Billing info is set in OpenAI and activated
+# WARNING (these iterations will cost you around 10 cents and older models are cheaper than new models)
+
 import pandas as pd
 import openai
 
-# First run this in terminal: OPENAI_API_KEY=your_api_key
-# Then in terminal you can use this to run this code: uv run minutes_reason.py
+# Then in your RStudio Tools > Terminal type python minutes_reason.py
 
-# Load OpenAI API key from environment variable
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-if not OPENAI_API_KEY:
-    raise ValueError('Please set the OPENAI_API_KEY environment variable.')
-openai.api_key = OPENAI_API_KEY
+openai.api_key = 'MY KEY'
 
 # Load the minutes CSV
-minutes_df = pd.read_csv('data/minutes_tbl.csv')
+minutes_df = pd.read_csv('data/minutes_tbl.csv', encoding='utf-8')
 
 # The prompt
 # Change this and see how it performs differently e.g. try adding You should be concise. Focus on whether the main cause was domestic or international and whether it was economic or financial. One or two words only. 
-SYSTEM_PROMPT = "You are an expert summarizer of central bank meeting minutes. Given the following meeting minutes, extract and state the main reason for the monetary policy decision."
+SYSTEM_PROMPT = "You are an expert summarizer of central bank meeting minutes. Given the following meeting minutes, extract and state the main reason for the monetary policy decision. Focus on whether the main cause was domestic or international. One or two words only."
 
 results = []
 
@@ -49,5 +56,5 @@ for idx, row in minutes_df.iterrows():
 
 # Write results to CSV
 output_df = pd.DataFrame(results)
-output_df.to_csv('data/minutes_main_reasons.csv', index=False)
-print("\nAll results written to data/minutes_main_reasons.csv") 
+output_df.to_csv('data/results.csv', index=False)
+print("\nAll results written to data/results.csv") 

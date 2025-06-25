@@ -50,5 +50,5 @@ minutes_tbl <-
   arrange(date)
 
 #### Save ####
-write_csv(minutes_tbl, "minutes_tbl.csv")
-
+setwd('data')
+write.csv(minutes_tbl, "minutes_tbl.csv",  fileEncoding = "UTF-8", row.names = FALSE)
